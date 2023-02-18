@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./pages/index.css" />
+    <title>Место</title>
+  </head>
+  <body class="page">
+    <header class="header">
+      <img class="header__logo" src="./images/svg/logo.svg" alt="Mesto" />
+    </header>
+    <main class="main">
+      <section class="profile">
+        <img class="profile__avatar" src="./images/avatar.jpg" alt="фото" />
+
+        <div class="profile__info">
+          <div class="profile__title">
+            <h1 class="profile__name">Жак-Ив Кусто</h1>
+            <button class="profile__edit"></button>
+          </div>
+
+          <p class="profile__subtitle">Исследователь океана</p>
+        </div>
+
+        <button class="profile__add-button"></button>
+      </section>
+
+      <section class="elements">
+        <div class="element">
+          <img
+            class="element__photo"
+            src="./images/flower.jpg"
+            alt="маковое поле"
+          />
+          <div class="element__title">
+            <p class="element__text">Где-то в провинции</p>
+             <button class="element__like"></button>
+          </div>
+        </div>
+
+        <div class="element">
+          <img
+            class="element__photo"
+            src="./images/waterflow.jpg"
+            alt="водопад в лесу"
+          />
+          <div class="element__title">
+            <p class="element__text">Водопад</p>
+             <button class="element__like"></button>
+          </div>
+        </div>
+        <div class="element">
+          <img class="element__photo" src="./images/stones.jpg" alt="лагуна" />
+          <div class="element__title">
+            <p class="element__text">Голубая лагуна</p>
+             <button class="element__like"></button>
+          </div>
+        </div>
+
+        <div class="element">
+          <img
+            class="element__photo"
+            src="./images/legs.jpg"
+            alt="Куст между ног"
+          />
+          <div class="element__title">
+            <p class="element__text">Игра в прятки</p>
+             <button class="element__like"></button>
+          </div>
+        </div>
+
+        <div class="element">
+          <img
+            class="element__photo"
+            src="./images/wine.jpg"
+            alt="красное вино"
+          />
+          <div class="element__title">
+            <p class="element__text">Что-то на красном</p>
+             <button class="element__like"></button>
+          </div>
+        </div>
+
+        <div class="element">
+          <img class="element__photo" src="./images/owl.jpg" alt="Сова" />
+          <div class="element__title">
+            <p class="element__text">Совушка в лесу</p>
+             <button class="element__like"></button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <p class="footer__copyright">&copy;2023 Tanya Batrachenko</p>
+    </footer>
+    <div class="popup">
+      <div class="popup__container">
+        <form class="popup__form" novalidate>
+          <h2 class="popup__title">Редактировать профиль</h2>
+          <input
+            name="name"
+            id="name"
+            type="text"
+            class="popup__input"
+            placeholder="Имя"
+            required
+          />
+          <input
+            name="about"
+            id="about"
+            type="text"
+            class="popup__input"
+            placeholder="О себе"
+            required
+          />
+          <button type="submit" class="popup__save">Сохранить</button>
+        </form>
+        <button type="button" class="popup__close"></button>
+      </div>
+    </div>
+    <script src="./pages/script.js"></script>
+  </body>
+</html>
