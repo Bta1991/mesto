@@ -1,6 +1,5 @@
 .profile__info {
   margin: 0;
-  text-align: center;
   max-width: 100%;
 }
 
@@ -9,6 +8,5 @@
 @media screen and (max-width: 703px) {
   .profile__info {
     margin-bottom: 33px;
-
   }
 }
