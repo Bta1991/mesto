@@ -1,14 +1,18 @@
 .element__like {
-  display: flex;
+  margin: 0;
+  padding: 0;
+  /* display: flex; */
   width: 22px;
   height: 19px;
-  justify-content: flex-end;
+  /* justify-content: flex-end; */
   background-color: transparent;
   background-image: url(../../../images/svg/heart.svg);
+  background-repeat: no-repeat;
   border: none;
+  align-self: flex-end;
 }
 
 .element__like:hover {
-  opacity: .6;
+  opacity: .5;
   cursor: pointer;
 }
