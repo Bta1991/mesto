@@ -39,4 +39,3 @@ formElement.addEventListener('submit', handleFormSubmit);
 EditButton.addEventListener('click', openPopup);
 //закрытие окна
 CloseEdit.addEventListener('click', closePopup);
-
