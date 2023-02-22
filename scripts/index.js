@@ -39,3 +39,12 @@ formElement.addEventListener('submit', handleFormSubmit);
 editButton.addEventListener('click', openPopup);
 //закрытие окна
 closeEdit.addEventListener('click', closePopup);
+
+
+//здесь долждна быть обработка нажатия на Лайк
+// let LikeButton = document.querySelectorAll('.element_like');
+// function addLike(){
+// LikeButton.classList.toggle('like_active');
+// }
+
+// LikeButton.addEventListener('click', addLike);
