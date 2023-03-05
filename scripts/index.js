@@ -100,8 +100,9 @@ function likeListener(like) {
 function trashListener(trash) {
     trash.addEventListener('click', function (evt) {
         const eventTarget = evt.target
-        const parent = eventTarget.parentNode.parentNode
-        parent.remove()
+        // const parent = eventTarget.parentNode.parentNode
+         // parent.remove()
+        evt.target.closest('.element').remove();
     })
 }
 //  функция добавления listener для фото
