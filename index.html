@@ -36,7 +36,7 @@
                 <template id="element">
                     <article class="element">
                         <div class="element__container">
-                            <img class="element__photo" alt="элемент" />
+                            <img class="element__photo" alt="#" />
                             <button
                                 type="button"
                                 class="element__trash"
@@ -102,13 +102,20 @@
                         required
                     />
                     <button type="submit" class="popup__save">Создать</button>
-                    <!-- <button type="submit" class="popup__add-picture">Создать</button> -->
                 </form>
                 <button type="button" class="popup__close"></button>
             </div>
         </div>
         <div class="popup popup_view">
-            <div class="popup__container">
+            <div class="popup__photo">
+                <figure class="popup__figure">
+                    <img
+                        src="#"
+                        class="popup__image"
+                        alt="#"
+                    />
+                    <figcaption class="popup__photo-title"></figcaption>
+                </figure>
                 <button type="button" class="popup__close"></button>
             </div>
         </div>

@@ -42,7 +42,10 @@ const formEdit = popupEdit.querySelector('.popup__form')
 
 const editButton = document.querySelector('.profile__edit') //выбираем кнопку редактирование
 const addButton = document.querySelector('.profile__add-button') //выбираем кнопку добавить картинку
-//нажали на просмотр фото
+
+//выбор переменных в окне просмотра фото
+let photoUrl = popupView.querySelector('.popup__image')
+let photoTitle = popupView.querySelector('.popup__photo-title')
 
 // Находим поля формы релдактирования информации о себе в DOM
 let nameInput = formEdit.querySelector('.popup__input_data_name') // выбираем елемент имя
@@ -70,6 +73,7 @@ function addPhoto(inputsrc, inputtext) {
 
     // наполняем содержимым
     userElement.querySelector('.element__photo').src = inputsrc
+    userElement.querySelector('.element__photo').alt = inputtext
     userElement.querySelector('.element__text').textContent = inputtext
 
     likeListener(userElement.querySelector('.element__like')) // listener для лайка
@@ -95,7 +99,6 @@ function likeListener(like) {
 //  функция добавления listener для кнопки корзины
 function trashListener(trash) {
     trash.addEventListener('click', function (evt) {
-        // в переменной eventTarget окажется элемент
         const eventTarget = evt.target
         const parent = eventTarget.parentNode.parentNode
         parent.remove()
@@ -104,8 +107,9 @@ function trashListener(trash) {
 //  функция добавления listener для фото
 function photoListener(photo) {
     photo.addEventListener('click', function (evt) {
-        // в переменной eventTarget окажется элемент
         const eventTarget = evt.target
+        photoUrl.src = evt.target.src
+        photoTitle.textContent = evt.target.alt
         togglePopup(popupView)
     })
 }
