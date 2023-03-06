@@ -31,65 +31,77 @@ const popupEdit = document.querySelector('.popup_edit')
 const popupAdd = document.querySelector('.popup_add')
 const popupView = document.querySelector('.popup_view')
 
-//выберем кнопки закрыть
-const closeEdit = popupEdit.querySelector('.popup__close')
-const closeAdd = popupAdd.querySelector('.popup__close')
-const closeView = popupView.querySelector('.popup__close')
+// находим все крестики проекта по универсальному селектору
+const closeButtons = document.querySelectorAll('.popup__close')
 
 //выбор форм
-const formAdd = popupAdd.querySelector('.popup__form')
-const formEdit = popupEdit.querySelector('.popup__form')
+const formAdd = document.forms['addForm']
+const formEdit = document.forms['editForm']
 
 const editButton = document.querySelector('.profile__edit') //выбираем кнопку редактирование
 const addButton = document.querySelector('.profile__add-button') //выбираем кнопку добавить картинку
 
 //выбор переменных в окне просмотра фото
-let photoUrl = popupView.querySelector('.popup__image')
-let photoTitle = popupView.querySelector('.popup__photo-title')
+const photoUrl = popupView.querySelector('.popup__image')
+const photoTitle = popupView.querySelector('.popup__photo-title')
 
 // Находим поля формы релдактирования информации о себе в DOM
-let nameInput = formEdit.querySelector('.popup__input_data_name') // выбираем елемент имя
-let aboutInput = formEdit.querySelector('.popup__input_data_about') // выбираем елемент о себе
+const nameInput = formEdit.querySelector('.popup__input_data_name') // выбираем елемент имя
+const aboutInput = formEdit.querySelector('.popup__input_data_about') // выбираем елемент о себе
 
 // переменные Имени и О себе
-let userName = document.querySelector('.profile__name')
-let userAbout = document.querySelector('.profile__subtitle')
+const userName = document.querySelector('.profile__name')
+const userAbout = document.querySelector('.profile__subtitle')
 
 // Находим поля формы добавления фото
-let urlInput = formAdd.querySelector('.popup__input_data_url') // выбираем елемент имя
-let titleInput = formAdd.querySelector('.popup__input_data_title') // выбираем елемент о себе
+const urlInput = formAdd.querySelector('.popup__input_data_url') // выбираем елемент имя
+const titleInput = formAdd.querySelector('.popup__input_data_title') // выбираем елемент о себе
 
-//функция изменения видимости
-function togglePopup(target) {
-    target.classList.toggle('popup_opened') //класс содержит свойство видимости
+//функция добавления видимости
+function openPopup(target) {
+    target.classList.add('popup_opened') //класс содержит свойство видимости
+}
+//функция удаления видимости
+function closePopup(target) {
+    target.classList.remove('popup_opened')
 }
 
 const userTemplate = document.querySelector('#element').content
 const userElements = document.querySelector('.elements')
 
-function addPhoto(inputsrc, inputtext) {
-    // клонируем содержимое тега template
+//создание карточки на основе шаблона
+const createCard = (inputsrc, inputtext) => {
+    // Клонируем шаблон, наполняем его информацией из объекта data
     const userElement = userTemplate.querySelector('.element').cloneNode(true)
+    const elementPhoto = userElement.querySelector('.element__photo')
 
     // наполняем содержимым
-    userElement.querySelector('.element__photo').src = inputsrc
-    userElement.querySelector('.element__photo').alt = inputtext
+    elementPhoto.src = inputsrc
+    elementPhoto.alt = inputtext
     userElement.querySelector('.element__text').textContent = inputtext
 
-    likeListener(userElement.querySelector('.element__like')) // listener для лайка
-    trashListener(userElement.querySelector('.element__trash')) // listener для удаления
-    photoListener(userElement.querySelector('.element__photo')) // listener для фоток
-    // отображаем на странице
-    userElements.insertBefore(userElement, userElements.firstChild)
+    //вешаем обработчики
+    toggleLike(userElement.querySelector('.element__like')) // listener для лайка
+    deletePhoto(userElement.querySelector('.element__trash')) // listener для удаления
+    openPhoto(elementPhoto) // listener для фоток
+    // Возвращаем получившуюся карточку
+    return userElement
 }
 
-// обработчики и инициализация страницы----------------------------------------------------------------
+// рендер карточки
+function renderCard(inputsrc, inputtext) {
+    // Создаем карточку на основе данных
+    const userElement = createCard(inputsrc, inputtext)
+    // Помещаем ее в контейнер c фото
+    userElements.prepend(userElement)
+}
+
 initialCards.forEach((card) => {
-    addPhoto(card.link, card.name)
+    renderCard(card.link, card.name)
 })
 
 // универсальная функция добавления listener для кнопки лайка
-function likeListener(like) {
+function toggleLike(like) {
     like.addEventListener('click', function (evt) {
         // в переменной eventTarget окажется элемент
         const eventTarget = evt.target
@@ -97,21 +109,21 @@ function likeListener(like) {
     })
 }
 //  функция добавления listener для кнопки корзины
-function trashListener(trash) {
+function deletePhoto(trash) {
     trash.addEventListener('click', function (evt) {
         const eventTarget = evt.target
-        // const parent = eventTarget.parentNode.parentNode
-         // parent.remove()
-        evt.target.closest('.element').remove();
+        evt.target.closest('.element').remove()
     })
 }
 //  функция добавления listener для фото
-function photoListener(photo) {
+function openPhoto(photo) {
+    // photo.addEventListener('click', () => handleCardClick(item)); //нужно разобраться как сделать, сходу не получилос
     photo.addEventListener('click', function (evt) {
         const eventTarget = evt.target
         photoUrl.src = evt.target.src
+        photoUrl.alt = evt.target.alt
         photoTitle.textContent = evt.target.alt
-        togglePopup(popupView)
+        openPopup(popupView)
     })
 }
 
@@ -119,35 +131,34 @@ function photoListener(photo) {
 editButton.addEventListener('click', function () {
     nameInput.value = userName.textContent //при открытии записываем в значение то что на экране
     aboutInput.value = userAbout.textContent
-    togglePopup(popupEdit)
+    openPopup(popupEdit)
 })
-closeEdit.addEventListener('click', function () {
-    togglePopup(popupEdit)
-})
+
 // обработчик формы для окна редактирования информации
 formEdit.addEventListener('submit', function handleFormSubmit(evt) {
     evt.preventDefault()
     userName.textContent = nameInput.value
     userAbout.textContent = aboutInput.value
-    togglePopup(popupEdit)
+    closePopup(popupEdit)
 })
 
-//открытие закрытие окна добавления картинки
+//открытие окна для загрузки фото
 addButton.addEventListener('click', function () {
-    togglePopup(popupAdd)
+    openPopup(popupAdd)
 })
-closeAdd.addEventListener('click', function () {
-    togglePopup(popupAdd)
-})
+
 // обработчик формы для загрузки фото
 formAdd.addEventListener('submit', function handleFormSubmit(evt) {
     evt.preventDefault()
-    addPhoto(urlInput.value, titleInput.value)
+    renderCard(urlInput.value, titleInput.value)
     evt.target.reset()
-    togglePopup(popupAdd)
+    closePopup(popupAdd)
 })
 
-//открытие закрытие превью фото
-closeView.addEventListener('click', function () {
-    togglePopup(popupView)
+//обработка нажатия на крестики
+closeButtons.forEach((button) => {
+    // находим 1 раз ближайший к крестику попап
+    const popup = button.closest('.popup')
+    // устанавливаем обработчик закрытия на крестик
+    button.addEventListener('click', () => closePopup(popup))
 })
