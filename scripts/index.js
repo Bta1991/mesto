@@ -83,7 +83,8 @@ const createCard = (inputsrc, inputtext) => {
     //вешаем обработчики
     toggleLike(userElement.querySelector('.element__like')) // listener для лайка
     deletePhoto(userElement.querySelector('.element__trash')) // listener для удаления
-    openPhoto(elementPhoto) // listener для фоток
+    // openPhoto(elementPhoto) // listener для фоток
+    openPhoto(elementPhoto, inputsrc, inputtext) // listener для фоток
     // Возвращаем получившуюся карточку
     return userElement
 }
@@ -116,16 +117,17 @@ function deletePhoto(trash) {
     })
 }
 //  функция добавления listener для фото
-function openPhoto(photo) {
-    // photo.addEventListener('click', () => handleCardClick(item)); //нужно разобраться как сделать, сходу не получилос
-    photo.addEventListener('click', function (evt) {
-        const eventTarget = evt.target
-        photoUrl.src = evt.target.src
-        photoUrl.alt = evt.target.alt
-        photoTitle.textContent = evt.target.alt
+function openPhoto(photo, inputsrc, inputtext) {
+    photo.addEventListener('click', () => {
+        photoUrl.src = inputsrc
+        photoUrl.alt = inputtext
+        photoTitle.textContent = inputtext
         openPopup(popupView)
     })
 }
+
+
+
 
 //открытие и закрытие окна редактирования информации
 editButton.addEventListener('click', function () {
@@ -135,7 +137,7 @@ editButton.addEventListener('click', function () {
 })
 
 // обработчик формы для окна редактирования информации
-formEdit.addEventListener('submit', function handleFormSubmit(evt) {
+formEdit.addEventListener('submit', (evt) => {
     evt.preventDefault()
     userName.textContent = nameInput.value
     userAbout.textContent = aboutInput.value
@@ -148,7 +150,7 @@ addButton.addEventListener('click', function () {
 })
 
 // обработчик формы для загрузки фото
-formAdd.addEventListener('submit', function handleFormSubmit(evt) {
+formAdd.addEventListener('submit', (evt) => {
     evt.preventDefault()
     renderCard(urlInput.value, titleInput.value)
     evt.target.reset()
