@@ -57,13 +57,24 @@ const userAbout = document.querySelector('.profile__subtitle')
 const urlInput = formAdd.querySelector('.popup__input_data_url') // выбираем елемент имя
 const titleInput = formAdd.querySelector('.popup__input_data_title') // выбираем елемент о себе
 
-//функция добавления видимости
-function openPopup(target) {
-    target.classList.add('popup_opened') //класс содержит свойство видимости
+//функция открытия попапа
+function openPopup(t) {
+    t.classList.add('popup_opened') //класс содержит свойство видимости
+    document.addEventListener('keydown', function(evt) {
+        if (evt.key == 'Escape') {
+          console.log('asfasfasf')
+            closePopup(t)
+        }
+    })
+    // target.addEventListener('click', () => closePopup(target)) //пр6 закрытие по клику
 }
-//функция удаления видимости
-function closePopup(target) {
-    target.classList.remove('popup_opened')
+//функция закрытия попапа
+function closePopup(t) {
+    // if (target.classList.contains('popup popup_opened')) {
+    if (t.classList.contains('popup_opened')) {
+        console.log(t)
+        t.classList.remove('popup_opened')
+    }
 }
 
 const userTemplate = document.querySelector('#element').content
@@ -125,9 +136,6 @@ function openPhoto(photo, inputsrc, inputtext) {
         openPopup(popupView)
     })
 }
-
-
-
 
 //открытие и закрытие окна редактирования информации
 editButton.addEventListener('click', function () {
