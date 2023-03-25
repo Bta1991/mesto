@@ -54,6 +54,8 @@ const addButton = document.querySelector('.profile__add-button') //выбира�
 const saveButton = '.popup__save'
 // кнопка сохранить профиль
 const submitEdit = popupEdit.querySelector(saveButton)
+// кнопка добавить фото
+const submitAdd = popupAdd.querySelector(saveButton)
 
 //выбор переменных в окне просмотра фото
 const photoUrl = popupView.querySelector('.popup__image')
@@ -97,7 +99,13 @@ const closePopup = (popup) => {
 
 // функция "openEditPopup" открывает окно профиля, сбрасывает состояние полей ввода, устанавливает значения
 const openPopupEdit = () => {
-    resetValidation(popupEdit, '.popup__input', inputErrorClass, errorClass)
+    resetValidation(
+        popupEdit,
+        '.popup__input',
+        submitEdit,
+        inputErrorClass,
+        errorClass
+    )
     openPopup(popupEdit)
     nameInput.value = userName.textContent //при открытии записываем в значение то что на экране
     aboutInput.value = userAbout.textContent
@@ -116,7 +124,7 @@ const submitFormEdit = (evt) => {
 popupNodes.forEach((popup) => {
     popup.addEventListener('mousedown', (event) => {
         if (event.target === popup) {
-            popup.classList.remove('popup_opened')
+            closePopup(popup)
         }
     })
 })
@@ -206,6 +214,12 @@ formEdit.addEventListener('submit', submitFormEdit)
 //открытие окна для загрузки фото
 addButton.addEventListener('click', () => {
     formAdd.reset()
-    resetValidation(popupAdd, '.popup__input', inputErrorClass, errorClass)
+    resetValidation(
+        popupAdd,
+        '.popup__input',
+        submitAdd,
+        inputErrorClass,
+        errorClass
+    )
     openPopup(popupAdd)
 })

@@ -73,6 +73,7 @@ function checkInputValidity(
 export function resetValidation(
     formElement,
     inputSelector,
+    submitButtonSelector,
     inputErrorClass,
     errorClass
 ) {
@@ -96,7 +97,7 @@ export function resetValidation(
 
     toggleButtonState(
         Array.from(formElement.querySelectorAll(inputSelector)),
-        formElement.querySelector('.popup__save'),
+        submitButtonSelector,  // formElement.querySelector('.popup__save'),
         inactiveButtonClass
     )
 }
