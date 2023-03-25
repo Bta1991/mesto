@@ -6,7 +6,8 @@ background-image: url(../../../images/svg/edit.svg);
 background-size: cover;
 background-repeat: no-repeat;
 background-color: transparent;
-border: 0;
+border: 1px solid #FFF;
+padding: 0;
 }
 .profile__edit:hover {
   opacity: .6;

@@ -1,3 +1,11 @@
+import {
+    toggleButtonState,
+    resetValidation,
+    inactiveButtonClass,
+    inputErrorClass,
+    errorClass,
+} from './validation.js'
+
 //шаблон для начальных картинок
 const initialCards = [
     {
@@ -27,6 +35,7 @@ const initialCards = [
 ]
 
 //выбор popup
+const popupNodes = document.querySelectorAll('.popup')
 const popupEdit = document.querySelector('.popup_edit')
 const popupAdd = document.querySelector('.popup_add')
 const popupView = document.querySelector('.popup_view')
@@ -40,6 +49,11 @@ const formEdit = document.forms['editForm']
 
 const editButton = document.querySelector('.profile__edit') //выбираем кнопку редактирование
 const addButton = document.querySelector('.profile__add-button') //выбираем кнопку добавить картинку
+
+// выбираем кнопку сохранить
+const saveButton = '.popup__save'
+// кнопка сохранить профиль
+const submitEdit = popupEdit.querySelector(saveButton)
 
 //выбор переменных в окне просмотра фото
 const photoUrl = popupView.querySelector('.popup__image')
@@ -57,25 +71,55 @@ const userAbout = document.querySelector('.profile__subtitle')
 const urlInput = formAdd.querySelector('.popup__input_data_url') // выбираем елемент имя
 const titleInput = formAdd.querySelector('.popup__input_data_title') // выбираем елемент о себе
 
-//функция открытия попапа
-function openPopup(t) {
-    t.classList.add('popup_opened') //класс содержит свойство видимости
-    document.addEventListener('keydown', function(evt) {
-        if (evt.key == 'Escape') {
-          console.log('asfasfasf')
-            closePopup(t)
+//функция закрытия попапа по клавише Escape
+const handleEscape = (evt) => {
+    if (evt.key === 'Escape') {
+        const openedPopup = document.querySelector('.popup_opened') //ищем открытый попап
+        if (openedPopup) {
+            closePopup(openedPopup) //закрываем
         }
-    })
-    // target.addEventListener('click', () => closePopup(target)) //пр6 закрытие по клику
-}
-//функция закрытия попапа
-function closePopup(t) {
-    // if (target.classList.contains('popup popup_opened')) {
-    if (t.classList.contains('popup_opened')) {
-        console.log(t)
-        t.classList.remove('popup_opened')
     }
 }
+
+//функция открытия попапа и установки слушателя на нажатие escape
+const openPopup = (popup) => {
+    popup.classList.add('popup_opened') //класс содержит свойство видимости
+    document.addEventListener('keydown', handleEscape)
+}
+
+//функция закрытия попапа
+const closePopup = (popup) => {
+    if (popup.classList.contains('popup_opened')) {
+        popup.classList.remove('popup_opened')
+        document.removeEventListener('keydown', handleEscape)
+    }
+}
+
+// функция "openEditPopup" открывает окно профиля, сбрасывает состояние полей ввода, устанавливает значения
+const openPopupEdit = () => {
+    resetValidation(popupEdit, '.popup__input', inputErrorClass, errorClass)
+    openPopup(popupEdit)
+    nameInput.value = userName.textContent //при открытии записываем в значение то что на экране
+    aboutInput.value = userAbout.textContent
+    toggleButtonState([nameInput, aboutInput], submitEdit, inactiveButtonClass)
+}
+
+// обработчик формы для окна редактирования информации
+const submitFormEdit = (evt) => {
+    evt.preventDefault()
+    userName.textContent = nameInput.value
+    userAbout.textContent = aboutInput.value
+    closePopup(popupEdit)
+}
+
+//цикл по всем popup для закрытия по клику
+popupNodes.forEach((popup) => {
+    popup.addEventListener('mousedown', (event) => {
+        if (event.target === popup) {
+            popup.classList.remove('popup_opened')
+        }
+    })
+})
 
 const userTemplate = document.querySelector('#element').content
 const userElements = document.querySelector('.elements')
@@ -112,6 +156,7 @@ initialCards.forEach((card) => {
     renderCard(card.link, card.name)
 })
 
+// СЛУШАТЕЛИ
 // универсальная функция добавления listener для кнопки лайка
 function toggleLike(like) {
     like.addEventListener('click', function (evt) {
@@ -137,31 +182,11 @@ function openPhoto(photo, inputsrc, inputtext) {
     })
 }
 
-//открытие и закрытие окна редактирования информации
-editButton.addEventListener('click', function () {
-    nameInput.value = userName.textContent //при открытии записываем в значение то что на экране
-    aboutInput.value = userAbout.textContent
-    openPopup(popupEdit)
-})
-
-// обработчик формы для окна редактирования информации
-formEdit.addEventListener('submit', (evt) => {
-    evt.preventDefault()
-    userName.textContent = nameInput.value
-    userAbout.textContent = aboutInput.value
-    closePopup(popupEdit)
-})
-
-//открытие окна для загрузки фото
-addButton.addEventListener('click', function () {
-    openPopup(popupAdd)
-})
-
 // обработчик формы для загрузки фото
 formAdd.addEventListener('submit', (evt) => {
     evt.preventDefault()
     renderCard(urlInput.value, titleInput.value)
-    evt.target.reset()
+    // evt.target.reset()
     closePopup(popupAdd)
 })
 
@@ -171,4 +196,16 @@ closeButtons.forEach((button) => {
     const popup = button.closest('.popup')
     // устанавливаем обработчик закрытия на крестик
     button.addEventListener('click', () => closePopup(popup))
+})
+
+//открытие окна редактирования информации
+editButton.addEventListener('click', openPopupEdit)
+//нажатие на кнопку сохранить в профиле
+formEdit.addEventListener('submit', submitFormEdit)
+
+//открытие окна для загрузки фото
+addButton.addEventListener('click', () => {
+    formAdd.reset()
+    resetValidation(popupAdd, '.popup__input', inputErrorClass, errorClass)
+    openPopup(popupAdd)
 })

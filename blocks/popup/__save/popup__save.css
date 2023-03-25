@@ -6,13 +6,14 @@
   line-height: 22px;
   background-color: #000000;
   color: #ffffff;
-  border: none;
+  border: 0;
   outline: none;
   width: 100%;
   min-height: 50px;
-  margin-top: 48px;
+  margin-top: 13px;
   /* margin-bottom: 36px; */
   transition: 0.2s;
+  opacity: 1;
   border-radius: 2px;
 }
 
@@ -23,7 +24,7 @@
 
 @media screen and (max-width: 475px) {
   .popup__save {
-    margin-top: 45px;
+    margin-top: 35px;
     font-size: 14px;
     line-height: 17px;
     min-height: 46px;

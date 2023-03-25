@@ -6,9 +6,9 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 17px;
-  padding-bottom: 9px;
+  padding-bottom: 4px;
 }
 
-.popup__input:nth-child(2) {
-margin-top: 30px;
+.popup__input:first-of-type {
+  padding-bottom: 8px;
 }

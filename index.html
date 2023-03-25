@@ -4,9 +4,10 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="./pages/index.css" />
+        <link rel="icon" href="images/svg/favicon.svg" type="image/svg+xml" />
         <title>Место</title>
-        <script src="./scripts/index.js" defer></script>
-        <script src="./scripts/validation.js" defer></script>
+        <script src="./scripts/index.js" defer type="module"></script>
+        <script src="./scripts/validation.js" defer type="module"></script>
     </head>
     <body class="page">
         <header class="header">
@@ -71,6 +72,10 @@
                         placeholder="Имя"
                         required
                     />
+                    <span
+                        class="popup__error popup__error_visible"
+                        id="name-error"
+                    ></span>
                     <input
                         name="about"
                         id="about"
@@ -81,7 +86,16 @@
                         placeholder="О себе"
                         required
                     />
-                    <button type="submit" class="popup__save">Сохранить</button>
+                    <span
+                        class="popup__error popup__error_visible"
+                        id="about-error"
+                    ></span>
+                    <button
+                        type="submit"
+                        class="popup__save popup__save_disabled"
+                    >
+                        Сохранить
+                    </button>
                 </form>
                 <button type="button" class="popup__close"></button>
             </div>
@@ -100,6 +114,10 @@
                         placeholder="Название"
                         required
                     />
+                    <span
+                        class="popup__error popup__error_visible"
+                        id="picname-error"
+                    ></span>
                     <input
                         name="picurl"
                         id="picurl"
@@ -108,7 +126,16 @@
                         placeholder="Ссылка на картинку"
                         required
                     />
-                    <button type="submit" class="popup__save">Создать</button>
+                    <span
+                        class="popup__error popup__error_visible"
+                        id="picurl-error"
+                    ></span>
+                    <button
+                        type="submit"
+                        class="popup__save popup__save_disabled"
+                    >
+                        Создать
+                    </button>
                 </form>
                 <button type="button" class="popup__close"></button>
             </div>
