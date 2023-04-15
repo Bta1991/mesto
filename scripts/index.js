@@ -1,39 +1,9 @@
-import {
-    toggleButtonState,
-    resetValidation,
-    inactiveButtonClass,
-    inputErrorClass,
-    errorClass,
-} from './validation.js'
+// ИМПОРТ-----------------------------------------------------
+import { initialCards } from './Constants.js' //импортируем константы для карточки
+import { Card } from './Card.js' //импортируем класс создания елемента Card (.element)
+import { FormValidator } from './FormValidator.js' //импортируем класс валидации формы
 
-//шаблон для начальных картинок
-const initialCards = [
-    {
-        name: 'Архыз',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg',
-    },
-    {
-        name: 'Челябинская область',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg',
-    },
-    {
-        name: 'Иваново',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg',
-    },
-    {
-        name: 'Камчатка',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg',
-    },
-    {
-        name: 'Холмогорский район',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg',
-    },
-    {
-        name: 'Байкал',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg',
-    },
-]
-
+// КОНСТАНТЫ---------------------------------------------------
 //выбор popup
 const popupNodes = document.querySelectorAll('.popup')
 const popupEdit = document.querySelector('.popup_edit')
@@ -42,6 +12,13 @@ const popupView = document.querySelector('.popup_view')
 
 // находим все крестики проекта по универсальному селектору
 const closeButtons = document.querySelectorAll('.popup__close')
+
+// контейнер с карточками
+const userElements = document.querySelector('.elements')
+
+//выбор переменных в окне просмотра фото
+const photoUrl = popupView.querySelector('.popup__image')
+const photoTitle = popupView.querySelector('.popup__photo-title')
 
 //выбор форм
 const formAdd = document.forms['addForm']
@@ -57,10 +34,6 @@ const submitEdit = popupEdit.querySelector(saveButton)
 // кнопка добавить фото
 const submitAdd = popupAdd.querySelector(saveButton)
 
-//выбор переменных в окне просмотра фото
-const photoUrl = popupView.querySelector('.popup__image')
-const photoTitle = popupView.querySelector('.popup__photo-title')
-
 // Находим поля формы релдактирования информации о себе в DOM
 const nameInput = formEdit.querySelector('.popup__input_data_name') // выбираем елемент имя
 const aboutInput = formEdit.querySelector('.popup__input_data_about') // выбираем елемент о себе
@@ -73,6 +46,17 @@ const userAbout = document.querySelector('.profile__subtitle')
 const urlInput = formAdd.querySelector('.popup__input_data_url') // выбираем елемент имя
 const titleInput = formAdd.querySelector('.popup__input_data_title') // выбираем елемент о себе
 
+// обьект с селекторами форм
+const formSelectors = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__save',
+    inactiveButtonClass: 'popup__save_disabled',
+    inputErrorClass: 'popup__input_error',
+    errorClass: 'popup__error_visible',
+}
+
+// ФУНКЦИИ-----------------------------------------------------
 //функция закрытия попапа по клавише Escape
 const handleEscape = (evt) => {
     if (evt.key === 'Escape') {
@@ -97,19 +81,13 @@ const closePopup = (popup) => {
     }
 }
 
-// функция "openEditPopup" открывает окно профиля, сбрасывает состояние полей ввода, устанавливает значения
+// функция открывает окно профиля, сбрасывает состояние полей ввода, устанавливает значения
 const openPopupEdit = () => {
-    resetValidation(
-        popupEdit,
-        '.popup__input',
-        submitEdit,
-        inputErrorClass,
-        errorClass
-    )
     openPopup(popupEdit)
     nameInput.value = userName.textContent //при открытии записываем в значение то что на экране
     aboutInput.value = userAbout.textContent
-    toggleButtonState([nameInput, aboutInput], submitEdit, inactiveButtonClass)
+    const formEditValidate = new FormValidator(formSelectors, formEdit)
+    formEditValidate.enableValidation()
 }
 
 // обработчик формы для окна редактирования информации
@@ -129,71 +107,47 @@ popupNodes.forEach((popup) => {
     })
 })
 
-const userTemplate = document.querySelector('#element').content
-const userElements = document.querySelector('.elements')
-
-//создание карточки на основе шаблона
-const createCard = (inputsrc, inputtext) => {
-    // Клонируем шаблон, наполняем его информацией из объекта data
-    const userElement = userTemplate.querySelector('.element').cloneNode(true)
-    const elementPhoto = userElement.querySelector('.element__photo')
-
-    // наполняем содержимым
-    elementPhoto.src = inputsrc
-    elementPhoto.alt = inputtext
-    userElement.querySelector('.element__text').textContent = inputtext
-
-    //вешаем обработчики
-    toggleLike(userElement.querySelector('.element__like')) // listener для лайка
-    deletePhoto(userElement.querySelector('.element__trash')) // listener для удаления
-    // openPhoto(elementPhoto) // listener для фоток
-    openPhoto(elementPhoto, inputsrc, inputtext) // listener для фоток
-    // Возвращаем получившуюся карточку
-    return userElement
+// заполняет содержимое элементов всплывающего окна c фото
+function setPopupImage(item) {
+    photoUrl.src = item.closest('.element').querySelector('.element__photo').src
+    photoUrl.alt = item
+        .closest('.element')
+        .querySelector('.element__text').textContent
+    photoTitle.textContent = item
+        .closest('.element')
+        .querySelector('.element__text').textContent
 }
 
-// рендер карточки
-function renderCard(inputsrc, inputtext) {
-    // Создаем карточку на основе данных
-    const userElement = createCard(inputsrc, inputtext)
-    // Помещаем ее в контейнер c фото
-    userElements.prepend(userElement)
+//создание карточки
+const createCard = (inputsrc, inputtext) => {
+    const cardProperties = {
+        link: inputsrc,
+        name: inputtext,
+    }
+
+    const card = new Card('#element', cardProperties)
+    const cardElement = card.generateCard()
+
+    cardElement
+        .querySelector('.element__photo')
+        .addEventListener('click', (evt) => {
+            setPopupImage(evt.target)
+            openPopup(popupView)
+        })
+
+    userElements.prepend(cardElement)
 }
 
 initialCards.forEach((card) => {
-    renderCard(card.link, card.name)
+    createCard(card.link, card.name)
 })
 
-// СЛУШАТЕЛИ
-// универсальная функция добавления listener для кнопки лайка
-function toggleLike(like) {
-    like.addEventListener('click', function (evt) {
-        // в переменной eventTarget окажется элемент
-        const eventTarget = evt.target
-        eventTarget.classList.toggle('element__like_active')
-    })
-}
-//  функция добавления listener для кнопки корзины
-function deletePhoto(trash) {
-    trash.addEventListener('click', function (evt) {
-        const eventTarget = evt.target
-        evt.target.closest('.element').remove()
-    })
-}
-//  функция добавления listener для фото
-function openPhoto(photo, inputsrc, inputtext) {
-    photo.addEventListener('click', () => {
-        photoUrl.src = inputsrc
-        photoUrl.alt = inputtext
-        photoTitle.textContent = inputtext
-        openPopup(popupView)
-    })
-}
+// СЛУШАТЕЛИ ------------------------------------------------
 
 // обработчик формы для загрузки фото
 formAdd.addEventListener('submit', (evt) => {
     evt.preventDefault()
-    renderCard(urlInput.value, titleInput.value)
+    createCard(urlInput.value, titleInput.value)
     // evt.target.reset()
     closePopup(popupAdd)
 })
@@ -214,12 +168,7 @@ formEdit.addEventListener('submit', submitFormEdit)
 //открытие окна для загрузки фото
 addButton.addEventListener('click', () => {
     formAdd.reset()
-    resetValidation(
-        popupAdd,
-        '.popup__input',
-        submitAdd,
-        inputErrorClass,
-        errorClass
-    )
+    const formAddValidate = new FormValidator(formSelectors, formAdd)
+    formAddValidate.enableValidation()
     openPopup(popupAdd)
 })
