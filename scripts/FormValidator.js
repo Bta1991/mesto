@@ -78,6 +78,13 @@ export class FormValidator {
         })
     }
 
+    resetValidation() {
+        this._toggleButtonState();
+
+        this._inputList.forEach((inputElement) => {
+            this._hideInputError(inputElement);
+        })
+    }
     //функция обработчик валидации и остановка стандартного поведения
     enableValidation() {
         this._formElement.addEventListener('submit', (evt) => {

@@ -57,6 +57,12 @@ const formSelectors = {
 }
 
 // ФУНКЦИИ-----------------------------------------------------
+// включаем валидацию форм единожды
+const formEditValidate = new FormValidator(formSelectors, formEdit)
+formEditValidate.enableValidation()
+const formAddValidate = new FormValidator(formSelectors, formAdd)
+formAddValidate.enableValidation()
+
 //функция закрытия попапа по клавише Escape
 const handleEscape = (evt) => {
     if (evt.key === 'Escape') {
@@ -86,8 +92,7 @@ const openPopupEdit = () => {
     openPopup(popupEdit)
     nameInput.value = userName.textContent //при открытии записываем в значение то что на экране
     aboutInput.value = userAbout.textContent
-    const formEditValidate = new FormValidator(formSelectors, formEdit)
-    formEditValidate.enableValidation()
+    formEditValidate.resetValidation()
 }
 
 // обработчик формы для окна редактирования информации
@@ -107,15 +112,12 @@ popupNodes.forEach((popup) => {
     })
 })
 
-// заполняет содержимое элементов всплывающего окна c фото
-function setPopupImage(item) {
-    photoUrl.src = item.closest('.element').querySelector('.element__photo').src
-    photoUrl.alt = item
-        .closest('.element')
-        .querySelector('.element__text').textContent
-    photoTitle.textContent = item
-        .closest('.element')
-        .querySelector('.element__text').textContent
+// заполняет содержимое элементов всплывающего окна c фото и открывает попап
+function handleCardClick(name, link) {
+    photoUrl.src = link
+    photoUrl.alt = name
+    photoTitle.textContent = name
+    openPopup(popupView)
 }
 
 //создание карточки
@@ -124,22 +126,23 @@ const createCard = (inputsrc, inputtext) => {
         link: inputsrc,
         name: inputtext,
     }
-
-    const card = new Card('#element', cardProperties)
+    const card = new Card('#element', cardProperties, handleCardClick)
     const cardElement = card.generateCard()
 
-    cardElement
-        .querySelector('.element__photo')
-        .addEventListener('click', (evt) => {
-            setPopupImage(evt.target)
-            openPopup(popupView)
-        })
-
-    userElements.prepend(cardElement)
+    return cardElement
 }
 
+// рендер карточки
+function renderCard(inputsrc, inputtext) {
+    // Создаем карточку на основе данных
+    const userElement = createCard(inputsrc, inputtext)
+    // Помещаем ее в контейнер c фото
+    userElements.prepend(userElement)
+}
+
+// пройдемся циклом по первоначальным карточкам
 initialCards.forEach((card) => {
-    createCard(card.link, card.name)
+    renderCard(card.link, card.name)
 })
 
 // СЛУШАТЕЛИ ------------------------------------------------
@@ -147,8 +150,7 @@ initialCards.forEach((card) => {
 // обработчик формы для загрузки фото
 formAdd.addEventListener('submit', (evt) => {
     evt.preventDefault()
-    createCard(urlInput.value, titleInput.value)
-    // evt.target.reset()
+    renderCard(urlInput.value, titleInput.value)
     closePopup(popupAdd)
 })
 
@@ -168,7 +170,6 @@ formEdit.addEventListener('submit', submitFormEdit)
 //открытие окна для загрузки фото
 addButton.addEventListener('click', () => {
     formAdd.reset()
-    const formAddValidate = new FormValidator(formSelectors, formAdd)
-    formAddValidate.enableValidation()
     openPopup(popupAdd)
+    formAddValidate.resetValidation()
 })

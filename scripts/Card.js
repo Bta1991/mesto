@@ -1,9 +1,10 @@
 // класс Card создает дом элемент карточки, заполяет его
 export class Card {
-    constructor(templateSelector, data) {
+    constructor(templateSelector, data, handleCardClick) {
         this._templateSelector = templateSelector
         this._image = data.link
         this._title = data.name
+        this._handleCardClick = handleCardClick
     }
 
     // _getTemplate получаем шаблон карточки, создает его и возвращает
@@ -35,6 +36,11 @@ export class Card {
             .querySelector('.element__trash')
             .addEventListener('click', (evt) => {
                 this._handleDeleteClick(evt.target)
+            })
+        this._card
+            .querySelector('.element__photo')
+            .addEventListener('click', () => {
+                this._handleCardClick(this._title, this._image)
             })
     }
 
