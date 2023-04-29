@@ -1,3 +1,4 @@
+import '../pages/index.css'; //  импорт главного файла стилей для веб пак плагина
 // импорт классов --------------------------------
 import { Card } from '../components/Card.js' //импортируем класс создания елемента Card (.element)
 import { FormValidator } from '../components/FormValidator.js' //импортируем класс валидации формы
