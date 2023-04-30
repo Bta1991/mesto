@@ -2,8 +2,8 @@
 export class Card {
     constructor({ templateSelector, data, handleCardClick }) {
         this._templateSelector = templateSelector
-        this._image = data.picurl
-        this._title = data.picname
+        this._imageUrl = data.picurl
+        this._imageTitle = data.picname
         this._handleCardClick = handleCardClick
         this._card = this._getTemplate()
         this._like = this._card.querySelector('.element__like')
@@ -39,15 +39,15 @@ export class Card {
             this._handleDeleteClick(evt.target)
         })
         this._photo.addEventListener('click', () => {
-            this._handleCardClick(this._title, this._image)
+            this._handleCardClick(this._imageTitle, this._imageUrl)
         })
     }
 
     // generateCard создает карточку и возвращает её
     generateCard() {
-        this._photo.src = this._image
-        this._photo.alt = this._title
-        this._text.textContent = this._title
+        this._photo.src = this._imageUrl
+        this._photo.alt = this._imageTitle
+        this._text.textContent = this._imageTitle
         this._setEventListeners()
         return this._card
     }

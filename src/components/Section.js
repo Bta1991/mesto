@@ -1,17 +1,13 @@
-// добавили нужное свойство
-//  const section = new Section({items: [], renderer: ()=>{}}, '.cards__list')
-// section.renderItems()
-
 export class Section {
     constructor({ items, renderer }, selector) {
         this._items = items
         this._renderer = renderer
-        // this._container = document.querySelector(selector) //перенесла селектор в константы
-        this._container = selector
+        this._container = document.querySelector(selector)
     }
     //рисуем элементы
     renderItems() {
-        this._items.forEach((item) => this._renderer(item))
+        // т.к. параметр функции совпадает можно не использовать промежуточную функцию
+        this._items.forEach(this._renderer)
     }
     // добавляем елемент в контейнер
     addItem(itemHtml) {

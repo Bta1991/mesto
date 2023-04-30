@@ -3,17 +3,17 @@ import { Popup } from '../components/Popup.js'
 export class PopupWithForm extends Popup {
     constructor({ popupSelector, handleFormSubmit }) {
         super(popupSelector)
-        this._form = this._popupSelector.querySelector('.popup__form')
+        this._form = this._popup.querySelector('.popup__form')
         this._inputList = this._form.querySelectorAll('.popup__input')
         this._handleFormSubmit = handleFormSubmit
     }
 
     _getInputValues() {
-        this._inputValues = {}
+      const inputValues = {}
         this._inputList.forEach(
-            (input) => (this._inputValues[input.name] = input.value)
+            (input) => (inputValues[input.name] = input.value)
         )
-        return this._inputValues
+        return inputValues
     }
 
     setEventListeners() {

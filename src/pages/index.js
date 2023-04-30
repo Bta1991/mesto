@@ -1,4 +1,4 @@
-import '../pages/index.css'; //  импорт главного файла стилей для веб пак плагина
+import '../pages/index.css' //  импорт главного файла стилей для веб пак плагина
 // импорт классов --------------------------------
 import { Card } from '../components/Card.js' //импортируем класс создания елемента Card (.element)
 import { FormValidator } from '../components/FormValidator.js' //импортируем класс валидации формы
@@ -10,40 +10,33 @@ import { UserInfo } from '../components/UserInfo.js' // класс для ото
 // импортируем константы
 import { initialCards } from '../utils/InitialCards.js' // первоначальные карточки
 import {
-    popupEdit,
-    popupAdd,
-    popupView,
-    cardsContainer,
     formAdd,
     formEdit,
     editButton,
     addButton,
     nameInput,
     aboutInput,
-    userName,
-    userAbout,
     formSelectors,
 } from '../utils/Constants.js'
 
 //--------------------------------
 
 // создадим экземпляр попапа открытия увеличенного изображения popupView
-const imageViewPopup = new PopupWithImage(popupView)
+const imageViewPopup = new PopupWithImage('.popup_view')
 // создадим экземпляр класса для данных о пользователе
-const userInfo = new UserInfo(userName, userAbout)
+const userInfo = new UserInfo('.profile__name', '.profile__subtitle')
 // создадим экземпляр попапа для редактирования информации
 const formEditPopup = new PopupWithForm({
-    popupSelector: popupEdit,
+    popupSelector: '.popup_edit',
     handleFormSubmit: (data) => {
         userInfo.setUserInfo(data)
     },
 })
 
 const formAddPopup = new PopupWithForm({
-    popupSelector: popupAdd,
+    popupSelector: '.popup_add',
     handleFormSubmit: (data) => {
         cards.addItem(createCard(data))
-        // cards.addItem(createCard({ name: titleInput.value, link: urlInput.value }))
     },
 })
 //создание карточки
@@ -51,9 +44,9 @@ const createCard = (item) => {
     const card = new Card({
         templateSelector: '#element',
         data: item,
-        handleCardClick: () => {
+        handleCardClick: (picname, picurl) => {
             //фц-ция заполнения при открытии фото
-            imageViewPopup.open(item)
+            imageViewPopup.open({ picname, picurl })
         },
     })
     const cardElement = card.generateCard()
@@ -69,7 +62,7 @@ const cards = new Section(
             cards.addItem(createCard(item))
         },
     },
-    cardsContainer
+    '.elements'
 )
 
 cards.renderItems() //рендерим карточки
