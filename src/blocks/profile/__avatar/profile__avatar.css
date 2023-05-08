@@ -1,18 +1,14 @@
-.profile__avatar{
-  margin: 0;
-  margin-right: 30px;
-  max-width: 120px;
-  height: 100%;
-  border-radius: 50%;
+.profile__avatar {
+    margin: 0;
+    margin-right: 30px;
+    max-width: 120px;
+    height: 100%;
+    border-radius: 50%;
 }
 
 @media screen and (max-width: 703px) {
-  .profile__avatar {
-    margin: 0;
-    margin-bottom: 26px;
-  }
+    .profile__avatar {
+        margin: 0;
+        margin-bottom: 26px;
+    }
 }
-
-
-
-

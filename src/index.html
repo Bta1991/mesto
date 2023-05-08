@@ -3,34 +3,56 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="<%=require('./images/svg/favicon.svg')%>" type="image/svg+xml" />
+        <link
+            rel="icon"
+            href="<%=require('./images/svg/favicon.svg')%>"
+            type="image/svg+xml"
+        />
         <title>Место</title>
     </head>
     <body class="page">
         <header class="header">
-            <img class="header__logo" src="<%=require('./images/svg/logo.svg')%>" alt="Место" />
+            <img
+                class="header__logo"
+                src="<%=require('./images/svg/logo.svg')%>"
+                alt="Место"
+            />
         </header>
 
         <main class="main">
             <section class="profile">
-                <img
-                    class="profile__avatar"
-                    src="<%=require('./images/avatar.jpg')%>"
-                    alt="Фото пользователя"
-                />
-
+                <div class="profile__avatar-area">
+                    <img
+                        class="profile__avatar"
+                        src="<%=require('./images/avatar.jpg')%>"
+                        alt="Фото пользователя"
+                    />
+                    <button
+                        type="button"
+                        class="profile__avatar-edit"
+                        aria-label="Редактировать аватар профиля"
+                    ></button>
+                </div>
                 <div class="profile__info">
                     <div class="profile__title">
                         <h1 class="profile__name">Жак-Ив Кусто</h1>
-                        <button type="button" class="profile__edit"></button>
+                        <button
+                            type="button"
+                            class="profile__edit"
+                            aria-label="Редактировать профиль"
+                        ></button>
                     </div>
 
                     <p class="profile__subtitle">Исследователь океана</p>
                 </div>
 
-                <button type="button" class="profile__add-button"></button>
+                <button
+                    type="button"
+                    class="profile__add-button"
+                    aria-label="Добавить фото"
+                ></button>
             </section>
-
+            <!-- Шаблон для фоток -->
             <section class="elements">
                 <template id="element">
                     <article class="element">
@@ -39,14 +61,19 @@
                             <button
                                 type="button"
                                 class="element__trash"
+                                aria-label="Удалить фото"
                             ></button>
                         </div>
-                        <div class="element__title">
+                        <div class="element__info">
                             <h2 class="element__text"></h2>
-                            <button
-                                type="button"
-                                class="element__like"
-                            ></button>
+                            <div class="element__like-area">
+                                <button
+                                    type="button"
+                                    class="element__like"
+                                    aria-label="Лайкнуть фото"
+                                ></button>
+                                <p class="element__like-counter">0</p>
+                            </div>
                         </div>
                     </article>
                 </template>
@@ -55,6 +82,42 @@
         <footer class="footer">
             <p class="footer__copyright">&copy;2023 Tanya B. проект Mesto</p>
         </footer>
+        <!-- Здесь поапы -->
+        <!-- Изменить аватар -->
+        <div class="popup popup_avatar">
+            <div class="popup__container">
+                <h2 class="popup__title">Обновить аватар</h2>
+                <form class="popup__form" name="avatarForm" novalidate>
+                    <input
+                        name="avatar"
+                        id="avatar"
+                        minlength="2"
+                        maxlength="200"
+                        type="url"
+                        class="popup__input popup__input_data_name"
+                        placeholder="Введите ссылку на аватар"
+                        required
+                    />
+                    <span
+                        class="popup__error popup__error_visible"
+                        id="name-error"
+                    ></span>
+                    <button
+                        type="submit"
+                        class="popup__save popup__save_disabled"
+                        aria-label="Сохранить"
+                    >
+                        Сохранить
+                    </button>
+                </form>
+                <button
+                    type="button"
+                    class="popup__close"
+                    aria-label="Закрыть"
+                ></button>
+            </div>
+        </div>
+        <!-- Редактировать информацию о себе -->
         <div class="popup popup_edit">
             <div class="popup__container">
                 <h2 class="popup__title">Редактировать профиль</h2>
@@ -90,13 +153,19 @@
                     <button
                         type="submit"
                         class="popup__save popup__save_disabled"
+                        aria-label="Сохранить"
                     >
                         Сохранить
                     </button>
                 </form>
-                <button type="button" class="popup__close"></button>
+                <button
+                    type="button"
+                    class="popup__close"
+                    aria-label="Закрыть"
+                ></button>
             </div>
         </div>
+        <!-- Добавить элемент с фото -->
         <div class="popup popup_add">
             <div class="popup__container">
                 <h2 class="popup__title">Новое место</h2>
@@ -130,20 +199,50 @@
                     <button
                         type="submit"
                         class="popup__save popup__save_disabled"
+                        aria-label="Создать"
                     >
                         Создать
                     </button>
                 </form>
-                <button type="button" class="popup__close"></button>
+                <button
+                    type="button"
+                    class="popup__close"
+                    aria-label="Закрыть"
+                ></button>
             </div>
         </div>
+        <!-- Удалить фото -->
+        <div class="popup popup_delete">
+            <div class="popup__container">
+                <h2 class="popup__title">Вы уверены?</h2>
+                <form class="popup__form" name="deleteForm" novalidate>
+                    <button
+                        type="submit"
+                        class="popup__save"
+                        aria-label="Сохранить"
+                    >
+                        Да
+                    </button>
+                </form>
+                <button
+                    type="button"
+                    class="popup__close"
+                    aria-label="Закрыть"
+                ></button>
+            </div>
+        </div>
+        <!-- Увеличенное фото -->
         <div class="popup popup_view">
             <div class="popup__photo">
                 <figure class="popup__figure">
                     <img src="#" class="popup__image" alt="#" />
                     <figcaption class="popup__photo-title"></figcaption>
                 </figure>
-                <button type="button" class="popup__close"></button>
+                <button
+                    type="button"
+                    class="popup__close"
+                    aria-label="Закрыть"
+                ></button>
             </div>
         </div>
     </body>
