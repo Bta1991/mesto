@@ -11,7 +11,6 @@ import PopupWithConfirmation from '../components/PopupWithConfirmation.js' // и
 import UserInfo from '../components/UserInfo.js' // класс для отображения информации о пользователе
 
 // импортируем константы
-// import { initialCards } from '../utils/InitialCards.js' // первоначальные карточки
 import {
     formAdd,
     formEdit,
@@ -37,8 +36,6 @@ let userID
 
 Promise.all([api.getUserInfo(), api.getInitialsCards()])
     .then(([data, item]) => {
-        console.log(data)
-        console.log(item)
         userID = data._id
         userInfo.setUserInfo(data.name, data.about)
         userInfo.setUserAvatar(data.avatar)
@@ -91,7 +88,6 @@ const handleCardClick = (name, link) => {
 const handleLikeClick = (cardID, card) => {
     api.setLike(cardID)
         .then((res) => {
-            console.log(res)
             card.checkLikesCount(res)
         })
         .catch((err) => {
@@ -101,7 +97,6 @@ const handleLikeClick = (cardID, card) => {
 const handleDislikeClick = (cardID, card) => {
     api.deleteLike(cardID)
         .then((res) => {
-            console.log(res)
             card.checkLikesCount(res)
         })
         .catch((err) => {
@@ -110,22 +105,16 @@ const handleDislikeClick = (cardID, card) => {
 }
 
 // обьявим экземпляр попапа формы редактирования информации
-// const formEditPopup = new PopupWithForm({
-//     popupSelector: '.popup_edit',
-//     handleFormSubmit: (data) => {
-//         userInfo.setUserInfo(data)
-//     },
-// })
 const formEditPopup = new PopupWithForm('.popup_edit', submitProfileForm)
 // слушатели для popupEdit
 formEditPopup.setEventListeners()
 
 function submitProfileForm(inputValues) {
-    userInfo.setUserInfo(inputValues.name, inputValues.about)
+    userInfo.setUserInfo(inputValues.user, inputValues.about)
     api.setUserInfo(inputValues)
         .then(() => {
             formEditPopup.close()
-            userInfo.setUserInfo(inputValues.name, inputValues.about)
+            userInfo.setUserInfo(inputValues.user, inputValues.about)
         })
         .catch((err) => {
             console.log(err)
@@ -146,7 +135,6 @@ const formAddPopup = new PopupWithForm('.popup_add', handleFormSubmit)
 function handleFormSubmit(inputValues) {
     api.addCard(inputValues)
         .then((res) => {
-            console.log(res)
             formAddPopup.close()
             section.addItem(createCard(res))
         })
@@ -171,11 +159,9 @@ formDeletePopup.setEventListeners()
 // функция для удаления карточки
 function handleDeleteSubmit(card, cardID) {
     api.deleteCard(cardID)
-        .then(() => {
-            console.log(cardID)
-            console.log(card)
+        .then((res) => {
             formDeletePopup.close()
-            card.removeCard()
+            card.deleteCard(res)
         })
         .catch((err) => {
             console.log(err)
@@ -231,6 +217,3 @@ const formAddValidate = new FormValidator(formSelectors, formAdd)
 formAddValidate.enableValidation()
 const formAvatarValidate = new FormValidator(formSelectors, formAvatar)
 formAvatarValidate.enableValidation()
-
-// cohort-65
-// fc896ded-773b-41d7-8169-6e43a44c9f52

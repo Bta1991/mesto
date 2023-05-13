@@ -21,6 +21,13 @@ export default class Card {
         this._handleDeleteClick = handleDeleteClick
         this._handleLikeClick = handleLikeClick
         this._handleDislikeClick = handleDislikeClick
+        //шаблон и селекторы
+        this._card = this._getTemplate()
+        this._likeButton = this._card.querySelector('.element__like')
+        this._trash = this._card.querySelector('.element__trash')
+        this._photo = this._card.querySelector('.element__photo')
+        this._text = this._card.querySelector('.element__text')
+        this._likeCount = this._card.querySelector('.element__like-counter')
     }
 
     // _getTemplate получаем шаблон карточки, создает его и возвращает
@@ -38,9 +45,9 @@ export default class Card {
         }
     }
 
-    removeCard() {
-        this._newCard.remove()
-        this._newCard = null
+    deleteCard() {
+        this._card.remove()
+        this._card = null
     }
 
     _likeCard() {
@@ -53,7 +60,7 @@ export default class Card {
 
     checkLikesCount(data) {
         this._likeCount.textContent = data.likes.length
-        this._likeButton.classList.toggle('elements__like__button_active')
+        this._likeButton.classList.toggle('element__like_active')
     }
 
     // _setEventListeners устанавливает слушатели на кнопки лайк и удаления
@@ -63,7 +70,9 @@ export default class Card {
         })
 
         this._trash.addEventListener('click', () => {
-            this._handleDeleteClick.open(this._newCard, this._data._id)
+            this._handleDeleteClick.open(this._card, this._data._id)
+            // this._handleDeleteClick(this)
+
         })
         this._photo.addEventListener('click', () => {
             this._handleCardClick(this._imageTitle, this._imageUrl)
@@ -72,12 +81,6 @@ export default class Card {
 
     // generateCard создает карточку и возвращает её
     generateCard() {
-        this._newCard = this._getTemplate()
-        this._likeButton = this._newCard.querySelector('.element__like')
-        this._trash = this._newCard.querySelector('.element__trash')
-        this._photo = this._newCard.querySelector('.element__photo')
-        this._text = this._newCard.querySelector('.element__text')
-        this._likeCount = this._newCard.querySelector('.element__like-counter')
         this._likeCount.textContent = this._like.length
         this._photo.src = this._imageUrl
         this._photo.alt = this._imageTitle
@@ -90,6 +93,6 @@ export default class Card {
 
         this._setEventListeners()
 
-        return this._newCard
+        return this._card
     }
 }
