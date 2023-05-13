@@ -1,8 +1,8 @@
-export class Popup {
+export default class Popup {
     constructor(popupSelector) {
         // конструктор принимает на вход селектор который записываем в приватное свойство
         this._popup = document.querySelector(popupSelector)
-        this._handleEscClose = this._handleEscClose.bind(this) //свойство _handleEscClose привязывается методом bind к экземпляру класса Popup
+        this._handleEscClose = this._handleEscClose.bind(this)
     }
 
     open() {

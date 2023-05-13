@@ -1,16 +1,17 @@
-export class Section {
-    constructor({ items, renderer }, selector) {
-        this._items = items
+export default class Section {
+    constructor({ renderer }, selector) {
         this._renderer = renderer
         this._container = document.querySelector(selector)
     }
     //рисуем элементы
-    renderItems() {
-        // т.к. параметр функции совпадает можно не использовать промежуточную функцию
-        this._items.forEach(this._renderer)
+    renderItems(elements) {
+        this._elements = elements
+        this._elements.reverse().forEach((item) => {
+            this._renderer(item)
+        })
     }
     // добавляем елемент в контейнер
-    addItem(itemHtml) {
-        this._container.prepend(itemHtml)
+    addItem(element) {
+        this._container.prepend(element)
     }
 }
