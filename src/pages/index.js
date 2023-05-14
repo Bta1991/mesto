@@ -66,7 +66,7 @@ const section = new Section(
 //создание карточки
 function createCard(data) {
     const card = new Card(
-        '#element',
+        '#card',
         data,
         handleCardClick,
         handleLikeClick,
@@ -82,8 +82,6 @@ function createCard(data) {
 const handleCardClick = (name, link) => {
     imageViewPopup.open({ name, link })
 }
-
-//фц-ция удаления фото
 
 //фции лайков дизлайков
 const handleLikeClick = (cardID, card) => {
@@ -112,17 +110,9 @@ formEditPopup.setEventListeners()
 
 function submitProfileForm(inputValues) {
     userInfo.setUserInfo(inputValues.user, inputValues.about)
-    api.setUserInfo(inputValues)
-        .then(() => {
-            formEditPopup.close()
-            userInfo.setUserInfo(inputValues.user, inputValues.about)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-        .finally(() => {
-            formEditPopup.setLoading()
-        })
+    return api.setUserInfo(inputValues).then(() => {
+        userInfo.setUserInfo(inputValues.user, inputValues.about)
+    })
 }
 
 // создадим экземпляр попапа открытия увеличенного изображения popupView
@@ -134,17 +124,9 @@ imageViewPopup.setEventListeners()
 const formAddPopup = new PopupWithForm('.popup_add', handleFormSubmit)
 //фция для поапа добавления
 function handleFormSubmit(inputValues) {
-    api.addCard(inputValues)
-        .then((res) => {
-            formAddPopup.close()
-            section.addItem(createCard(res))
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-        .finally(() => {
-            formAddPopup.setLoading()
-        })
+    return api.addCard(inputValues).then((res) => {
+        section.addItem(createCard(res))
+    })
 }
 // слушатели для popupAdd
 formAddPopup.setEventListeners()
@@ -159,11 +141,12 @@ formDeletePopup.setEventListeners()
 
 // функция для удаления карточки
 function handleDeleteSubmit(cardID, card) {
-    api.deleteCard(cardID)
-        .then(() => {
+    return api.deleteCard(cardID)
+        .then((res) => {
             formDeletePopup.close()
             console.log(card)
-            card.deleteCard()
+            console.log(this)
+            card.removeCard()
         })
         .catch((err) => {
             console.log(err)
@@ -179,17 +162,9 @@ const formAvatarPopup = new PopupWithForm('.popup_avatar', submitAvatarForm)
 formAvatarPopup.setEventListeners()
 
 function submitAvatarForm(inputValues) {
-    api.setAvatar(inputValues)
-        .then(() => {
-            formAvatarPopup.close()
-            userInfo.setUserAvatar(inputValues.avatar)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-        .finally(() => {
-            formAvatarPopup.setLoading()
-        })
+    return api.setAvatar(inputValues).then(() => {
+        userInfo.setUserAvatar(inputValues.avatar)
+    })
 }
 
 //КНОПКА открываем редактирование информации о себе

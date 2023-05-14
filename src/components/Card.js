@@ -45,7 +45,7 @@ export default class Card {
         }
     }
 
-    deleteCard() {
+    removeCard() {
         this._card.remove()
         this._card = null
     }
