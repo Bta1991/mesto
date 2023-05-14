@@ -74,6 +74,7 @@ function createCard(data) {
         formDeletePopup,
         userID
     )
+
     return card.generateCard()
 }
 
@@ -157,11 +158,12 @@ const formDeletePopup = new PopupWithConfirmation(
 formDeletePopup.setEventListeners()
 
 // функция для удаления карточки
-function handleDeleteSubmit(card, cardID) {
+function handleDeleteSubmit(cardID, card) {
     api.deleteCard(cardID)
-        .then((res) => {
+        .then(() => {
             formDeletePopup.close()
-            card.deleteCard(res)
+            console.log(card)
+            card.deleteCard()
         })
         .catch((err) => {
             console.log(err)

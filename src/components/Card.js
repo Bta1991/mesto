@@ -70,9 +70,8 @@ export default class Card {
         })
 
         this._trash.addEventListener('click', () => {
-            this._handleDeleteClick.open(this._card, this._data._id)
+            this._handleDeleteClick.open(this._data._id, this._card)
             // this._handleDeleteClick(this)
-
         })
         this._photo.addEventListener('click', () => {
             this._handleCardClick(this._imageTitle, this._imageUrl)
