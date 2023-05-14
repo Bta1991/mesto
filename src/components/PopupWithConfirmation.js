@@ -1,26 +1,31 @@
 import Popup from './Popup.js'
 
 export default class PopupWithConfirmation extends Popup {
-    constructor(popupSelector, handleDeleteSubmit) {
+    constructor(popupSelector) {
         super(popupSelector)
-        this._handleDeleteSubmit = handleDeleteSubmit
         this._submitButton = this._popup.querySelector('.popup__save')
         this._defaultText = this._submitButton.textContent
+
+        this._popupForm = this._popup.querySelector('.popup__form')
     }
 
     //ставим слушатель и меняем подпись кнопки
     setEventListeners() {
         super.setEventListeners()
-        this._submitButton.addEventListener('click', (evt) => {
+        this._popupForm.addEventListener('submit', (evt) => {
             evt.preventDefault()
             this._submitButton.textContent = 'Удаление...'
-            this._handleDeleteSubmit(this._cardID, this._card)
+            this._handleSubmitCallback()
         })
     }
 
-    // возвращаем подпись кнопки обратно
+    //возвращаем подпись кнопки обратно
     setLoading() {
         this._submitButton.textContent = this._defaultText
+    }
+
+    setSubmitAction(action) {
+        this._handleSubmitCallback = action
     }
 
     open(cardID, card) {

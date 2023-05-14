@@ -34,6 +34,7 @@ const api = new Api({
 // переменная ID пользователя
 let userID
 
+//ждем выполнение обоих методов api
 Promise.all([api.getUserInfo(), api.getInitialsCards()])
     .then(([data, item]) => {
         userID = data._id
@@ -71,8 +72,8 @@ function createCard(data) {
         handleCardClick,
         handleLikeClick,
         handleDislikeClick,
-        formDeletePopup,
-        userID
+        userID,
+        handleDeleteClick
     )
 
     return card.generateCard()
@@ -81,6 +82,25 @@ function createCard(data) {
 //фц-ция заполнения при открытии фото
 const handleCardClick = (name, link) => {
     imageViewPopup.open({ name, link })
+}
+
+//фц-ция клик на корзину
+function handleDeleteClick(card) {
+    const handleConfirm = () => {
+        api.deleteCard(card._cardID)
+            .then(() => {
+                formDeletePopup.close()
+                card.removeCard()
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+            .finally(() => {
+                formDeletePopup.setLoading()
+            })
+    }
+    formDeletePopup.setSubmitAction(handleConfirm)
+    formDeletePopup.open()
 }
 
 //фции лайков дизлайков
@@ -132,29 +152,10 @@ function handleFormSubmit(inputValues) {
 formAddPopup.setEventListeners()
 
 // обьявим экземпляр попапа подверждения удаления
-const formDeletePopup = new PopupWithConfirmation(
-    '.popup_delete',
-    handleDeleteSubmit
-)
+const formDeletePopup = new PopupWithConfirmation('.popup_delete')
 // слушатели для popupDelete
 formDeletePopup.setEventListeners()
 
-// функция для удаления карточки
-function handleDeleteSubmit(cardID, card) {
-    return api.deleteCard(cardID)
-        .then((res) => {
-            formDeletePopup.close()
-            console.log(card)
-            console.log(this)
-            card.removeCard()
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-        .finally(() => {
-            formDeletePopup.setLoading()
-        })
-}
 
 //Попап формы смены аватара
 const formAvatarPopup = new PopupWithForm('.popup_avatar', submitAvatarForm)

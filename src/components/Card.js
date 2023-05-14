@@ -6,8 +6,8 @@ export default class Card {
         handleCardClick,
         handleLikeClick,
         handleDislikeClick,
-        handleDeleteClick,
-        userID
+        userID,
+        handleDeleteClick
     ) {
         this._templateSelector = templateSelector
         this._data = data
@@ -21,20 +21,14 @@ export default class Card {
         this._handleDeleteClick = handleDeleteClick
         this._handleLikeClick = handleLikeClick
         this._handleDislikeClick = handleDislikeClick
-        //шаблон и селекторы
-        this._card = this._getTemplate()
-        this._likeButton = this._card.querySelector('.element__like')
-        this._trash = this._card.querySelector('.element__trash')
-        this._photo = this._card.querySelector('.element__photo')
-        this._text = this._card.querySelector('.element__text')
-        this._likeCount = this._card.querySelector('.element__like-counter')
     }
 
     // _getTemplate получаем шаблон карточки, создает его и возвращает
     _getTemplate() {
         const cardElement = document
             .querySelector(this._templateSelector)
-            .content.cloneNode(true)
+            .content.querySelector('.element')
+            .cloneNode(true)
 
         return cardElement
     }
@@ -70,8 +64,7 @@ export default class Card {
         })
 
         this._trash.addEventListener('click', () => {
-            this._handleDeleteClick.open(this._data._id, this._card)
-            // this._handleDeleteClick(this)
+            this._handleDeleteClick(this)
         })
         this._photo.addEventListener('click', () => {
             this._handleCardClick(this._imageTitle, this._imageUrl)
@@ -80,6 +73,14 @@ export default class Card {
 
     // generateCard создает карточку и возвращает её
     generateCard() {
+        //шаблон и селекторы
+        this._card = this._getTemplate()
+        this._likeButton = this._card.querySelector('.element__like')
+        this._trash = this._card.querySelector('.element__trash')
+        this._photo = this._card.querySelector('.element__photo')
+        this._text = this._card.querySelector('.element__text')
+        this._likeCount = this._card.querySelector('.element__like-counter')
+
         this._likeCount.textContent = this._like.length
         this._photo.src = this._imageUrl
         this._photo.alt = this._imageTitle
