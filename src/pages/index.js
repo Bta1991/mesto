@@ -12,9 +12,6 @@ import UserInfo from '../components/UserInfo.js' // класс для отобр
 
 // импортируем константы
 import {
-    formAdd,
-    formEdit,
-    formAvatar,
     editButton,
     addButton,
     avatarButton,
@@ -124,7 +121,7 @@ const handleDislikeClick = (cardID, card) => {
 }
 
 // обьявим экземпляр попапа формы редактирования информации
-const formEditPopup = new PopupWithForm('.popup_edit', submitProfileForm)
+const formEditPopup = new PopupWithForm('.popup_editForm', submitProfileForm)
 // слушатели для popupEdit
 formEditPopup.setEventListeners()
 
@@ -141,7 +138,7 @@ const imageViewPopup = new PopupWithImage('.popup_view')
 imageViewPopup.setEventListeners()
 
 // обьявим экземпляр попапа формы добавления
-const formAddPopup = new PopupWithForm('.popup_add', handleFormSubmit)
+const formAddPopup = new PopupWithForm('.popup_addForm', handleFormSubmit)
 //фция для поапа добавления
 function handleFormSubmit(inputValues) {
     return api.addCard(inputValues).then((res) => {
@@ -152,13 +149,13 @@ function handleFormSubmit(inputValues) {
 formAddPopup.setEventListeners()
 
 // обьявим экземпляр попапа подверждения удаления
-const formDeletePopup = new PopupWithConfirmation('.popup_delete')
+const formDeletePopup = new PopupWithConfirmation('.popup_deleteForm')
 // слушатели для popupDelete
 formDeletePopup.setEventListeners()
 
 
 //Попап формы смены аватара
-const formAvatarPopup = new PopupWithForm('.popup_avatar', submitAvatarForm)
+const formAvatarPopup = new PopupWithForm('.popup_avatarForm', submitAvatarForm)
 
 formAvatarPopup.setEventListeners()
 
@@ -189,9 +186,9 @@ avatarButton.addEventListener('click', () => {
 
 // ВАЛИДАЦИЯ --------------------
 // включаем валидацию форм единожды
-const formEditValidate = new FormValidator(formSelectors, formEdit)
+const formEditValidate = new FormValidator(formSelectors, 'editForm')
 formEditValidate.enableValidation()
-const formAddValidate = new FormValidator(formSelectors, formAdd)
+const formAddValidate = new FormValidator(formSelectors, 'addForm')
 formAddValidate.enableValidation()
-const formAvatarValidate = new FormValidator(formSelectors, formAvatar)
+const formAvatarValidate = new FormValidator(formSelectors, 'avatarForm')
 formAvatarValidate.enableValidation()

@@ -9,17 +9,11 @@ export const formSelectors = {
     errorClass: 'popup__error_visible',
 }
 
-//выбор форм
-export const formAdd = document.forms['addForm']
-export const formEdit = document.forms['editForm']
-export const formAvatar = document.forms['avatarForm']
-
-
 export const editButton = document.querySelector('.profile__edit') //выбираем кнопку редактирование
 export const addButton = document.querySelector('.profile__add-button') //выбираем кнопку добавить картинку
 export const avatarButton = document.querySelector('.profile__avatar-edit') //кнопка редактировать аватар
 
-
 // Находим поля формы релдактирования информации о себе в DOM
+export const formEdit = document.forms['editForm']
 export const nameInput = formEdit.querySelector('.popup__input_data_user') // выбираем елемент имя
 export const aboutInput = formEdit.querySelector('.popup__input_data_about') // выбираем елемент о себе
